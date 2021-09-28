@@ -1,13 +1,13 @@
 from flask_api import FlaskAPI
 from flask_sqlalchemy import SQLAlchemy
 from flask import request, jsonify, abort
+from werkzeug.wrappers import response
 
 # local import
 from instance.config import app_config
 
 # initialize sql-alchemy
 db = SQLAlchemy()
-
 
 def create_app(config_name):
     from app.models import Report
@@ -21,8 +21,9 @@ def create_app(config_name):
     def reports():
         if request.method == "POST":
             name = str(request.data.get('name', ''))
+            report_details = str(request.data.get('report_details', ''))
             if name:
-                report = Report(name=name)
+                report = Report(name=name,report_details =report_details )
                 report.save()
                 response = jsonify({
                     'id': report.id,
@@ -48,8 +49,8 @@ def create_app(config_name):
             response = jsonify(results)
             response.status_code = 200
             return response
-   
-    @app.route('/reports/', methods=['GET', 'PUT', 'DELETE'])
+
+    @app.route('/reports/<int:id>', methods=['GET', 'PUT', 'DELETE'])
     def report_manipulation(id, **kwargs):
      # retrieve a report using it's ID
         report = Report.query.filter_by(id=id).first()

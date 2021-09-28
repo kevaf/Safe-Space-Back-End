@@ -11,13 +11,20 @@ class Report(db.Model):
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     report_details = db.Column(db.String(2000))
 
-    def __init__(self, name):
+    def __init__(self, name,report_details ):
         """initialize with name."""
         self.name = name
+        self.report_details= report_details 
 
     def save(self):
         db.session.add(self)
         db.session.commit()
+    
+    @classmethod
+    def get_reports(cls,id):
+        report = Report.query.filter_by(id=id).first()
+
+        return report
 
     @staticmethod
     def get_all():
