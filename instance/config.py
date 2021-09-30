@@ -5,13 +5,13 @@ class Config(object):
     """Parent configuration class."""
     DEBUG = False
     CSRF_ENABLED = True
-    SECRET = 'thisiskev'
+    SECRET_KEY = 'thisiskev'
     SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://moringa:kev2214@localhost/safespace"
 
 
 class DevelopmentConfig(Config):
     """Configurations for Development."""
-    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_GB")
 
 
 class TestingConfig(Config):
